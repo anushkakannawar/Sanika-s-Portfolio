@@ -9,7 +9,7 @@ const portfolioItems = [
     tags: ["Illustration", "Vector Art"],
     color: "var(--color-accent-red)",
     desc: "High-quality prints featuring bold typography and modern aesthetics. Elevate your space with intentional art.",
-    images: ["/posters/poster1.png", "/posters/poster2.png", "/posters/poster3.png", "/posters/poster4.png", "/posters/poster5.png", "/posters/poster6.png", "/posters/poster7.png", "/posters/poster8.png", "/posters/poster9.png", "/posters/poster10.png"],
+    images: ["/posters/poster1.jpg", "/posters/poster2.jpg", "/posters/poster3.jpg", "/posters/poster4.jpg", "/posters/poster5.jpg", "/posters/poster6.jpg", "/posters/poster7.jpg", "/posters/poster8.jpg", "/posters/poster9.jpg", "/posters/poster10.jpg"],
   },
 
   {
