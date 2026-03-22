@@ -62,7 +62,7 @@ a {
 }
 
 .sticker-btn:hover {
-  transform: translate(2px, 2px);
+  /* transform: translate(2px, 2px); removed for framer motion float effect */
   box-shadow: var(--shadow-sticker-hover);
 }
 
@@ -77,9 +77,11 @@ a {
 }
 
 .container {
-  max-width: 1200px;
+  width: 90%;
+  max-width: 1400px;
   margin: 0 auto;
-  padding: 0 5%;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 .section {
@@ -275,10 +277,27 @@ a {
 .footer {
   background: var(--color-border);
   color: var(--color-bg);
-  padding: 100px 0 50px;
+  padding: 100px 0 160px; /* Increased bottom padding to avoid overlap with fixed nav */
   text-align: center;
   position: relative;
   overflow: hidden;
+}
+
+/* Visibility fix for footer buttons on dark background */
+.footer .sticker-btn {
+  border-color: var(--color-bg);       /* Make border visible (white) against dark bg */
+  box-shadow: 4px 4px 0px var(--color-bg); /* Make shadow visible (white) */
+  color: var(--color-text); /* Ensure text is dark on the white button background */
+}
+
+.footer .sticker-btn:hover {
+  box-shadow: 2px 2px 0px var(--color-bg);
+}
+
+/* Specific override for the yellow button in footer to look good */
+.footer .sticker-btn.secondary {
+  border-color: var(--color-bg);
+  box-shadow: 4px 4px 0px var(--color-bg);
 }
 
 .footer-heading {
