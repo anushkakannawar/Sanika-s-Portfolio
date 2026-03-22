@@ -18,6 +18,8 @@ const portfolioItems = [
     tags: ["Illustration", "Stickers"],
     color: "var(--color-accent-red)",
     desc: "Turning digital art into something you can hold. High-quality, weather-resistant stickers designed to bring a burst of personality to your laptop, water bottle, or workspace. Built for those who love the details.",
+    images: ["/stickers/sticker1.jpg", "/stickers/sticker2.jpg", "/stickers/sticker3.jpg", "/stickers/sticker4.jpg", "/stickers/sticker5.jpg", "/stickers/sticker6.jpg", "/stickers/sticker7.jpg", "/stickers/sticker8.jpg"],
+
   },
 
   {
@@ -40,6 +42,8 @@ const portfolioItems = [
     tags: ["Branding", "Print"],
     color: "var(--color-text)",
     desc: "Menus, coasters, and brand collateral giving a fresh, distinct vibe to Blondie Hospitality.",
+    images: ["/blondie/blondie1.jpg", "/blondie/blondie2.jpg", "/blondie/blondie3.jpg", "/blondie/blondie4.jpg", "/blondie/blondie5.jpg", "/blondie/blondie6.jpg", "/blondie/blondie7.jpg", "/blondie/blondie8.jpg"],
+
   }
 ];
 
