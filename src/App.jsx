@@ -110,26 +110,15 @@ function App() {
       {/* HERO SECTION */}
       <section className="section hero container" id="home">
         <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, x: -50 }}
+          animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-          className="hero-content"
+          className="hero-text"
         >
           <motion.h1 className="hero-title" style={{ y: yBg }}>
-            <span className="hero-title-line">
-              Sanika
-              <motion.span 
-                className="hero-portrait-wrapper"
-                whileHover={{ rotate: 0, scale: 1.1 }}
-                initial={{ opacity: 0, scale: 0.5, rotate: -20 }}
-                animate={{ opacity: 1, scale: 1, rotate: -5 }}
-                transition={{ type: "spring", stiffness: 200, damping: 12, delay: 0.5 }}
-              >
-                <img src="/sanika/sanikaphoto.jpg" alt="Sanika Kannawar" className="hero-portrait" />
-              </motion.span>
-              Kannawar
-            </span>
-            <span>
+            <span className="hero-title-name">Sanika</span>
+            <span className="hero-title-name">Kannawar</span>
+            <span className="hero-title-tagline">
               <span className="text-red">Designer</span> & <span className="text-blue">Illustrator.</span>
             </span>
           </motion.h1>
@@ -138,28 +127,14 @@ function App() {
           </p>
         </motion.div>
 
-        {/* Stickers decoration */}
         <motion.div
           className="sticker"
           style={{
-            top: '40%', right: '10%', width: '120px', height: '120px',
-            backgroundColor: 'var(--color-accent-yellow)', display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontFamily: 'var(--font-heading)', fontWeight: 800, color: 'var(--color-text)', transform: 'rotate(15deg)'
-          }}
-          whileHover={{ scale: 1.1, rotate: 0 }}
-          drag
-          dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
-        >
-          FRESH!
-        </motion.div>
-        <motion.div
-          className="sticker"
-          style={{
-            top: '60%', left: '15%', width: '100px', height: '100px',
+            top: '5%', left: '2%', width: '80px', height: '80px',
             backgroundColor: 'var(--color-accent-red)', display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontFamily: 'var(--font-heading)', fontWeight: 800, color: '#fff', transform: 'rotate(-10deg)', fontSize: '2rem'
+            fontFamily: 'var(--font-heading)', fontWeight: 800, color: '#fff', transform: 'rotate(-10deg)', fontSize: '1.5rem'
           }}
-          whileHover={{ scale: 1.1, rotate: 0 }}
+          whileHover={{ scale: 1.2, rotate: 0 }}
           drag
           dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
         >
@@ -169,32 +144,45 @@ function App() {
 
       {/* ABOUT SECTION */}
       <section className="section container" id="about">
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          variants={{
-            hidden: { opacity: 0, y: 50 },
-            visible: { opacity: 1, y: 0, transition: { duration: 0.8 } }
-          }}
-          style={{ maxWidth: '800px' }}
-        >
-          <h2 style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', marginBottom: '2rem', textTransform: 'uppercase' }}>
-            A <span className="text-blue">Contemporary Indian</span> Soul in Digital Design.
-          </h2>
-          <p style={{ fontSize: '1.2rem', marginBottom: '1.5rem', color: 'var(--color-text-light)' }}>
-            I am a TY student at Fergusson College with 3+ years of experience blending sharp minimalism with the bold vibrancy of Indian heritage. My workflow is obsessed with efficiency and visual narrative.
-          </p>
-          <p style={{ fontSize: '1.2rem', color: 'var(--color-text-light)' }}>
-            Beyond the screen, I channel my entrepreneurial side through <strong>Kacchapapad</strong>, translating aesthetic visions into tangible sticker culture.
-          </p>
-        </motion.div>
+        <div className="about-grid">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={{
+              hidden: { opacity: 0, y: 50 },
+              visible: { opacity: 1, y: 0, transition: { duration: 0.8 } }
+            }}
+            style={{ maxWidth: '800px' }}
+          >
+            <h2 style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', marginBottom: '2rem', textTransform: 'uppercase' }}>
+              A <span className="text-blue">Contemporary Indian</span> Soul in Digital Design.
+            </h2>
+            <p style={{ fontSize: '1.2rem', marginBottom: '1.5rem', color: 'var(--color-text-light)' }}>
+              I am a TY student at Fergusson College with 3+ years of experience blending sharp minimalism with the bold vibrancy of Indian heritage. My workflow is obsessed with efficiency and visual narrative.
+            </p>
+            <p style={{ fontSize: '1.2rem', color: 'var(--color-text-light)' }}>
+              Beyond the screen, I channel my entrepreneurial side through <strong>Kacchapapad</strong>, translating aesthetic visions into tangible sticker culture.
+            </p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="about-image-container"
+          >
+            <img src="/sanika/sanikaphoto.jpg" alt="About Sanika" className="about-image" />
+            <div className="about-image-frame"></div>
+          </motion.div>
+        </div>
       </section>
 
       {/* WORK / PORTFOLIO SECTION */}
       <section className="section container" id="work">
         <h2 style={{ fontSize: 'clamp(3rem, 6vw, 5rem)', textTransform: 'uppercase', borderBottom: '2px solid var(--color-border)', paddingBottom: '1rem', marginBottom: '2rem' }}>
-          Selected Works
+          MY WORK
         </h2>
 
         <div className="portfolio-grid">
