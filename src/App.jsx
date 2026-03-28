@@ -49,22 +49,24 @@ const portfolioItems = [
 
 const experienceItems = [
   {
-    role: "Brand Visual Design & Creative Direction",
+    id: "blondie",
+    role: "Graphic Designer",
     company: "Blondie Hospitality",
-    date: "2023 - Present",
-    desc: "Leading the visual identity, developing scalable brand collateral and guiding art direction for all physical and digital touchpoints."
+    type: "Internship",
+    date: "Dec 2025 - Present · 4 mos",
+    location: "Mumbai, Maharashtra, India · Remote",
+    desc: "Design Intern at Bastian’s Blondie, working on playful and engaging visual creatives for social media, events, and print. Supporting brand storytelling through thoughtful, fun, and feel good designs!!",
+    projectId: 5
   },
   {
-    role: "Folklore Compendium & Podcast Art",
-    company: "CCF India & Parrothouse Podcast",
-    date: "2022 - 2023",
-    desc: "Illustrated and laid out an 80+ page print compendium. Designed vibrant, bold cover art for the Parrothouse podcast series."
-  },
-  {
-    role: "Web Design & Development Intern",
-    company: "Elevate Labs",
-    date: "2021 - 2022",
-    desc: "Bridged the gap between design and code, contributing to frontend UI implementations with a keen eye for minimalist aesthetics."
+    id: "ccf",
+    role: "Illustrator and Visual designer",
+    company: "Centre for Contemporary Folklore",
+    type: "Internship",
+    date: "Aug 2025 - Present · 8 mos",
+    location: "New Delhi, Delhi, India · Remote",
+    desc: "Visual Design Intern at CCF, creating illustrations and digital designs for social media, websites, and print. Learning on the go, experimenting with visuals, and helping bring stories to life online.",
+    projectId: 4
   }
 ];
 
@@ -189,6 +191,7 @@ function App() {
           {portfolioItems.map((item, index) => (
             <motion.div
               className="portfolio-card"
+              id={`project-${item.id}`}
               key={item.id}
               layoutId={`project-${item.id}`}
               onClick={() => setSelectedProject(item)}
@@ -244,8 +247,16 @@ function App() {
             >
               <div className="timeline-date">{exp.date}</div>
               <h3 className="timeline-role">{exp.role}</h3>
-              <div className="timeline-company">{exp.company}</div>
-              <p style={{ color: 'var(--color-text-light)', maxWidth: '600px' }}>{exp.desc}</p>
+              <div className="timeline-company" style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '0.5rem' }}>
+                <a href={`#project-${exp.projectId}`} style={{ textDecoration: 'underline', textDecorationThickness: '2px', textUnderlineOffset: '4px', color: 'var(--color-accent-blue)' }}>
+                  {exp.company}
+                </a> 
+                <span style={{ opacity: 0.6 }}>· {exp.type}</span>
+              </div>
+              <div style={{ fontSize: '0.85rem', opacity: 0.8, marginBottom: '1rem' }}>
+                {exp.location}
+              </div>
+              <p style={{ color: 'var(--color-text-light)', maxWidth: '700px' }}>{exp.desc}</p>
             </motion.div>
           ))}
         </div>

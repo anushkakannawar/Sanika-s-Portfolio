@@ -1,18 +1,24 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Syne:wght@400;500;600;700;800&display=swap');
+
 :root {
-  --color-bg: #FAF9F6;
-  --color-text: #1A1A1A;
-  --color-text-light: #5A5A5A;
-  --color-accent-red: #E33519; /* Sindoor */
-  --color-accent-blue: #0033A0; /* Indigo */
-  --color-accent-yellow: #F8A900; /* Marigold */
-  --color-border: #1A1A1A;
-  
+  --color-bg: #1F1F1F;
+  /* Deep Dark Grey */
+  --color-text: #FAF9F6;
+  --color-text-light: #B0B0B0;
+  --color-accent-red: #E33519;
+  /* Sindoor */
+  --color-accent-blue: #00A0FF;
+  /* Electric Blue for dark mode */
+  --color-accent-yellow: #FFD200;
+  /* Vivid Marigold */
+  --color-border: rgba(255, 255, 255, 0.15);
+
   --font-heading: 'Syne', sans-serif;
   --font-body: 'Inter', sans-serif;
-  
-  --shadow-sticker: 4px 4px 0px var(--color-border);
-  --shadow-sticker-hover: 2px 2px 0px var(--color-border);
-  --shadow-card: 8px 8px 0px var(--color-border);
+
+  --shadow-sticker: 4px 4px 0px rgba(0, 0, 0, 0.5);
+  --shadow-sticker-hover: 2px 2px 0px rgba(0, 0, 0, 0.5);
+  --shadow-card: 10px 10px 0px rgba(0, 0, 0, 0.2);
 }
 
 html {
@@ -29,7 +35,12 @@ body {
   line-height: 1.6;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: var(--font-heading);
   font-weight: 800;
   margin: 0;
@@ -59,7 +70,8 @@ a {
   gap: 0.5rem;
   position: relative;
   text-transform: uppercase;
-  color: var(--color-text); /* Ensure the text is dark and visible */
+  color: var(--color-text);
+  /* Ensure the text is dark and visible */
 }
 
 .sticker-btn:hover {
@@ -96,11 +108,12 @@ a {
 /* Sticker Decorations */
 .sticker {
   position: absolute;
-  pointer-events: auto; /* Enable dragging */
+  pointer-events: auto;
+  /* Enable dragging */
   z-index: 10;
   border: 4px solid #fff;
   border-radius: 50%;
-  box-shadow: 4px 4px 15px rgba(0,0,0,0.1);
+  box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.1);
   background-color: #fff;
 }
 
@@ -116,18 +129,18 @@ a {
 }
 
 .hero-title {
-  font-size: clamp(3rem, 7vw, 7.5rem);
-  text-transform: uppercase;
-  max-width: 100%;
-  position: relative;
-  z-index: 2;
   display: flex;
   flex-direction: column;
-  line-height: 0.85;
-  letter-spacing: -0.04em;
+  margin-bottom: 2rem;
+  z-index: 2;
+  position: relative;
 }
 
 .hero-title-name {
+  font-size: clamp(3.5rem, 12vw, 8.5rem);
+  line-height: 0.9;
+  text-transform: uppercase;
+  letter-spacing: -0.05em;
   display: block;
 }
 
@@ -165,18 +178,13 @@ a {
 
 .about-image {
   width: 100%;
-  height: auto;
   aspect-ratio: 1/1;
   object-fit: cover;
-  border-radius: 50%; /* Here a circle works well for contrast but I'll make it a soft square if requested... oh wait user said NO small circle. I will make it a large soft-rounded square. */
+  border-radius: 24px;
   border: 4px solid var(--color-border);
   box-shadow: var(--shadow-sticker);
   position: relative;
   z-index: 2;
-}
-
-.about-image {
-  border-radius: 24px; /* Large soft rounded square */
 }
 
 .about-image-frame {
@@ -221,8 +229,13 @@ a {
 }
 
 @keyframes marquee {
-  0%   { transform: translate(0, 0); }
-  100% { transform: translate(-100%, 0); }
+  0% {
+    transform: translate(0, 0);
+  }
+
+  100% {
+    transform: translate(-100%, 0);
+  }
 }
 
 .portfolio-grid {
@@ -248,10 +261,10 @@ a {
 
 .portfolio-image {
   width: 100%;
-  height: 300px;
+  aspect-ratio: 4/5;
   object-fit: cover;
-  border-bottom: 2px solid var(--color-border);
-  transition: transform 0.5s ease;
+  border-bottom: 4px solid #fff;
+  transition: transform 0.6s ease;
 }
 
 .portfolio-card:hover .portfolio-image {
@@ -310,7 +323,8 @@ a {
 .timeline-item::before {
   content: '';
   position: absolute;
-  left: -2.35rem;     /* 2rem + width offset */
+  left: -2.35rem;
+  /* 2rem + width offset */
   top: 0.3rem;
   width: 12px;
   height: 12px;
@@ -339,12 +353,13 @@ a {
 
 /* Footer / Contact */
 .footer {
-  background: var(--color-border);
+  background: #000;
   color: var(--color-bg);
-  padding: 100px 0 50px;
+  padding: 120px 0 80px;
   text-align: center;
   position: relative;
   overflow: hidden;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .footer-heading {
@@ -375,9 +390,26 @@ a {
 }
 
 /* Utilities */
-.text-red { color: var(--color-accent-red); }
-.text-blue { color: var(--color-accent-blue); }
-.text-yellow { color: var(--color-accent-yellow); }
-.bg-red { background-color: var(--color-accent-red); }
-.bg-blue { background-color: var(--color-accent-blue); }
-.bg-yellow { background-color: var(--color-accent-yellow); }
+.text-red {
+  color: var(--color-accent-red);
+}
+
+.text-blue {
+  color: var(--color-accent-blue);
+}
+
+.text-yellow {
+  color: var(--color-accent-yellow);
+}
+
+.bg-red {
+  background-color: var(--color-accent-red);
+}
+
+.bg-blue {
+  background-color: var(--color-accent-blue);
+}
+
+.bg-yellow {
+  background-color: var(--color-accent-yellow);
+}
