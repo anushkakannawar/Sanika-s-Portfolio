@@ -252,7 +252,7 @@ function App() {
       </section>
 
       {/* FOOTER / CONTACT */}
-      <footer className="footer" id="contact">
+      <footer className="footer" id="contact" style={{ paddingBottom: '120px' }}>
         <div className="container" style={{ position: 'relative', zIndex: 2 }}>
           <motion.h2
             className="footer-heading"
@@ -268,10 +268,10 @@ function App() {
             <a href="https://instagram.com/kacchapapad_" target="_blank" rel="noreferrer" className="sticker-btn secondary">
               <Instagram size={20} /> @kacchapapad_
             </a>
-            <a href="mailto:hello@sanika.design" className="sticker-btn">
+            <a href="mailto:kannawarsanika@gmail.com" className="sticker-btn">
               <Mail size={20} /> Email Me
             </a>
-            <a href="tel:+910000000000" className="sticker-btn">
+            <a href="tel:+919552281805" className="sticker-btn">
               <Phone size={20} /> Let's Talk
             </a>
           </div>

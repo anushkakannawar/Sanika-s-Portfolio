@@ -59,6 +59,7 @@ a {
   gap: 0.5rem;
   position: relative;
   text-transform: uppercase;
+  color: var(--color-text); /* Ensure the text is dark and visible */
 }
 
 .sticker-btn:hover {
@@ -355,8 +356,11 @@ a {
 .footer-links {
   display: flex;
   justify-content: center;
-  gap: 2rem;
+  gap: 1rem;
   flex-wrap: wrap;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 20px;
 }
 
 .footer-link {
