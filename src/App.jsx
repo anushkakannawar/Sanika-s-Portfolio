@@ -102,65 +102,9 @@ function App() {
       </div>
 
       <nav style={{ position: 'fixed', bottom: '2rem', left: '50%', transform: 'translateX(-50%)', zIndex: 100, display: 'flex', gap: '1rem' }}>
-        <motion.a
-          href="#about"
-          className="sticker-btn"
-          whileHover={{
-            y: -5,
-            transition: { duration: 0.3, ease: "easeOut" }
-          }}
-          animate={{
-            y: [0, -4, 0] 
-          }}
-          transition={{
-            duration: 2,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-          whileTap={{ scale: 0.9 }}
-        >
-          About
-        </motion.a>
-        <motion.a
-          href="#work"
-          className="sticker-btn"
-          whileHover={{
-            y: -5,
-            transition: { duration: 0.3, ease: "easeOut" }
-          }}
-          animate={{
-            y: [0, -4, 0]
-          }}
-          transition={{
-            duration: 2.5,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 0.2
-          }}
-          whileTap={{ scale: 0.9 }}
-        >
-          Work
-        </motion.a>
-        <motion.a
-          href="#contact"
-          className="sticker-btn primary"
-          whileHover={{
-            y: -5,
-            transition: { duration: 0.3, ease: "easeOut" }
-          }}
-           animate={{
-            y: [0, -4, 0]
-          }}
-          transition={{
-            duration: 2.2,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 0.1
-          }}
-          whileTap={{ scale: 0.9 }}
-        >
-          Hire Me <ArrowRight size={16} />
-        </motion.a>
+        <a href="#about" className="sticker-btn">About</a>
+        <a href="#work" className="sticker-btn">Work</a>
+        <a href="#contact" className="sticker-btn primary">Hire Me <ArrowRight size={16} /></a>
       </nav>
 
       {/* HERO SECTION */}
@@ -172,8 +116,22 @@ function App() {
           className="hero-content"
         >
           <motion.h1 className="hero-title" style={{ y: yBg }}>
-            Sanika Kannawar<br />
-            <span className="text-red">Designer</span> & <span className="text-blue">Illustrator.</span>
+            <span className="hero-title-line">
+              Sanika
+              <motion.span 
+                className="hero-portrait-wrapper"
+                whileHover={{ rotate: 0, scale: 1.1 }}
+                initial={{ opacity: 0, scale: 0.5, rotate: -20 }}
+                animate={{ opacity: 1, scale: 1, rotate: -5 }}
+                transition={{ type: "spring", stiffness: 200, damping: 12, delay: 0.5 }}
+              >
+                <img src="/sanika/sanikaphoto.jpg" alt="Sanika Kannawar" className="hero-portrait" />
+              </motion.span>
+              Kannawar
+            </span>
+            <span>
+              <span className="text-red">Designer</span> & <span className="text-blue">Illustrator.</span>
+            </span>
           </motion.h1>
           <p className="hero-subtitle">
             Fresh, distinct, and thoughtfully executed designer.
@@ -186,16 +144,7 @@ function App() {
           style={{
             top: '40%', right: '10%', width: '120px', height: '120px',
             backgroundColor: 'var(--color-accent-yellow)', display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontFamily: 'var(--font-heading)', fontWeight: 800, color: 'var(--color-text)'
-          }}
-          initial={{ rotate: 15, y: 0 }}
-          animate={{ y: [0, -20, 0] }}
-          transition={{
-            y: {
-              duration: 3,
-              repeat: Infinity,
-              ease: "easeInOut"
-            }
+            fontFamily: 'var(--font-heading)', fontWeight: 800, color: 'var(--color-text)', transform: 'rotate(15deg)'
           }}
           whileHover={{ scale: 1.1, rotate: 0 }}
           drag
@@ -208,16 +157,7 @@ function App() {
           style={{
             top: '60%', left: '15%', width: '100px', height: '100px',
             backgroundColor: 'var(--color-accent-red)', display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontFamily: 'var(--font-heading)', fontWeight: 800, color: '#fff', fontSize: '2rem'
-          }}
-          initial={{ rotate: -10, y: 0 }}
-          animate={{ y: [0, -15, 0] }}
-          transition={{
-            y: {
-              duration: 4,
-              repeat: Infinity,
-              ease: "easeInOut"
-            }
+            fontFamily: 'var(--font-heading)', fontWeight: 800, color: '#fff', transform: 'rotate(-10deg)', fontSize: '2rem'
           }}
           whileHover={{ scale: 1.1, rotate: 0 }}
           drag

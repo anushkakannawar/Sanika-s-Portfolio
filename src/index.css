@@ -62,7 +62,7 @@ a {
 }
 
 .sticker-btn:hover {
-  /* transform: translate(2px, 2px); removed for framer motion float effect */
+  transform: translate(2px, 2px);
   box-shadow: var(--shadow-sticker-hover);
 }
 
@@ -77,11 +77,9 @@ a {
 }
 
 .container {
-  width: 90%;
-  max-width: 1400px;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 0;
-  box-sizing: border-box;
+  padding: 0 5%;
 }
 
 .section {
@@ -121,6 +119,41 @@ a {
   max-width: 1000px;
   position: relative;
   z-index: 2;
+  display: flex;
+  flex-direction: column;
+}
+
+.hero-title-line {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.hero-portrait-wrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: clamp(60px, 12vw, 120px);
+  height: clamp(60px, 12vw, 120px);
+  border-radius: 50%;
+  border: 4px solid #fff;
+  box-shadow: var(--shadow-sticker);
+  overflow: hidden;
+  background-color: var(--color-accent-yellow);
+  transform: rotate(-5deg);
+  transition: transform 0.3s ease;
+  flex-shrink: 0;
+}
+
+.hero-portrait-wrapper:hover {
+  transform: rotate(0deg) scale(1.05);
+}
+
+.hero-portrait {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .hero-title span {
@@ -277,27 +310,10 @@ a {
 .footer {
   background: var(--color-border);
   color: var(--color-bg);
-  padding: 100px 0 160px; /* Increased bottom padding to avoid overlap with fixed nav */
+  padding: 100px 0 50px;
   text-align: center;
   position: relative;
   overflow: hidden;
-}
-
-/* Visibility fix for footer buttons on dark background */
-.footer .sticker-btn {
-  border-color: var(--color-bg);       /* Make border visible (white) against dark bg */
-  box-shadow: 4px 4px 0px var(--color-bg); /* Make shadow visible (white) */
-  color: var(--color-text); /* Ensure text is dark on the white button background */
-}
-
-.footer .sticker-btn:hover {
-  box-shadow: 2px 2px 0px var(--color-bg);
-}
-
-/* Specific override for the yellow button in footer to look good */
-.footer .sticker-btn.secondary {
-  border-color: var(--color-bg);
-  box-shadow: 4px 4px 0px var(--color-bg);
 }
 
 .footer-heading {
