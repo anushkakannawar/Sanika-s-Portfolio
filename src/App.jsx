@@ -22,13 +22,7 @@ const portfolioItems = [
 
   },
 
-  {
-    id: 3,
-    title: "Rajasthan Beauty Grid",
-    tags: ["Social Media", "Layout"],
-    color: "var(--color-accent-blue)",
-    desc: "High-engagement layouts and carousel designs for Rajasthan Beauty Products.",
-  },
+
   {
     id: 4,
     title: "Folklore Compendium",
@@ -250,7 +244,7 @@ function App() {
               <div className="timeline-company" style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '0.5rem' }}>
                 <a href={`#project-${exp.projectId}`} style={{ textDecoration: 'underline', textDecorationThickness: '2px', textUnderlineOffset: '4px', color: 'var(--color-accent-blue)' }}>
                   {exp.company}
-                </a> 
+                </a>
                 <span style={{ opacity: 0.6 }}>· {exp.type}</span>
               </div>
               <div style={{ fontSize: '0.85rem', opacity: 0.8, marginBottom: '1rem' }}>
@@ -336,16 +330,29 @@ function App() {
               </p>
 
               {selectedProject.images && selectedProject.images.length > 0 ? (
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: '3rem' }}>
+                <div style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+                  gap: '2rem',
+                  maxWidth: '1000px',
+                  margin: '0 auto',
+                  padding: '1rem'
+                }}>
                   {selectedProject.images.map((img, i) => (
                     <motion.div
                       key={i}
                       initial={{ opacity: 0, y: 50 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.2 + (i * 0.1), duration: 0.6 }}
-                      style={{ border: '2px solid var(--color-border)', borderRadius: '12px', overflow: 'hidden', backgroundColor: '#fff', boxShadow: 'var(--shadow-card)' }}
+                      style={{
+                        overflow: 'hidden',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        maxHeight: '450px' /* Increased slightly for better fit */
+                      }}
                     >
-                      <img src={img} alt={`${selectedProject.title} ${i + 1}`} style={{ width: '100%', height: 'auto', display: 'block' }} />
+                      <img src={img} alt={`${selectedProject.title} ${i + 1}`} style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', display: 'block', borderRadius: '8px' }} />
                     </motion.div>
                   ))}
                 </div>

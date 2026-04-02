@@ -7,8 +7,8 @@
   --color-text-light: #B0B0B0;
   --color-accent-red: #E33519;
   /* Sindoor */
-  --color-accent-blue: #00A0FF;
-  /* Electric Blue for dark mode */
+  --color-accent-blue: #6366f1;
+  /* Indigo - more sophisticated than electric blue */
   --color-accent-yellow: #FFD200;
   /* Vivid Marigold */
   --color-border: rgba(255, 255, 255, 0.15);
@@ -69,9 +69,8 @@ a {
   box-shadow: var(--shadow-sticker);
   gap: 0.5rem;
   position: relative;
-  text-transform: uppercase;
-  color: var(--color-text);
-  /* Ensure the text is dark and visible */
+  color: #1F1F1F;
+  /* Dark text on white button */
 }
 
 .sticker-btn:hover {
@@ -86,7 +85,7 @@ a {
 
 .sticker-btn.secondary {
   background-color: var(--color-accent-yellow);
-  color: var(--color-border);
+  color: #1F1F1F; /* Visible dark text on yellow */
 }
 
 .container {
@@ -142,6 +141,7 @@ a {
   text-transform: uppercase;
   letter-spacing: -0.05em;
   display: block;
+  padding-right: 0.1em; /* Prevent clipping of last letters like 'R' */
 }
 
 .hero-title-tagline {
@@ -240,9 +240,9 @@ a {
 
 .portfolio-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
-  margin-top: 3rem;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
 }
 
 .portfolio-card {
@@ -261,9 +261,9 @@ a {
 
 .portfolio-image {
   width: 100%;
-  aspect-ratio: 4/5;
+  aspect-ratio: 1 / 1;
   object-fit: cover;
-  border-bottom: 4px solid #fff;
+  border-bottom: 2px solid var(--color-border);
   transition: transform 0.6s ease;
 }
 
@@ -272,7 +272,7 @@ a {
 }
 
 .portfolio-card-content {
-  padding: 1.5rem;
+  padding: 1rem;
   background: #fff;
   position: relative;
   z-index: 2;
@@ -281,6 +281,7 @@ a {
 .portfolio-card-title {
   font-size: 1.5rem;
   margin-bottom: 0.5rem;
+  color: #1F1F1F; /* Dark text on white card */
 }
 
 .portfolio-card-tags {
@@ -296,6 +297,7 @@ a {
   border-radius: 99px;
   font-weight: 600;
   text-transform: uppercase;
+  color: #1F1F1F; /* Dark text for tags on white */
 }
 
 /* Timeline/Experience */
@@ -354,7 +356,7 @@ a {
 /* Footer / Contact */
 .footer {
   background: #000;
-  color: var(--color-bg);
+  color: #fff; /* White text on black footer */
   padding: 120px 0 80px;
   text-align: center;
   position: relative;
