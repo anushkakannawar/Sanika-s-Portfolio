@@ -1,17 +1,12 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 import { ArrowRight, Mail, Instagram, Phone, X, ChevronLeft, ChevronRight } from 'lucide-react';
+import HeroReveal from './components/HeroReveal';
+import HorizontalWork from './components/HorizontalWork';
+import SequentialImageReveal from './components/SequentialImageReveal';
 
 const portfolioItems = [
-  {
-    id: 1,
-    title: "Poster Design",
-    tags: ["Illustration", "Vector Art"],
-    color: "var(--color-accent-red)",
-    desc: "High-quality prints featuring bold typography and modern aesthetics. Elevate your space with intentional art.",
-    images: ["/posters/poster1.jpg", "/posters/poster2.jpg", "/posters/poster3.jpg", "/posters/poster4.jpg", "/posters/poster5.jpg", "/posters/poster6.jpg", "/posters/poster7.jpg", "/posters/poster8.jpg", "/posters/poster9.jpg", "/posters/poster10.jpg"],
-  },
-
+  
   {
     id: 2,
     title: "Kacchapapad",
@@ -68,7 +63,7 @@ const experienceItems = [
 
 // Helper for the image placeholders (to be replaced by the user)
 const ImagePlaceholder = ({ color, title }) => (
-  <div style={{ backgroundColor: color, height: '100%', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', padding: '2rem', textAlign: 'center' }}>
+  <div style={{ backgroundColor: color, height: '100%', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--color-bg)', padding: '2rem', textAlign: 'center' }}>
     <span style={{ fontFamily: 'var(--font-heading)', fontSize: '1.2rem', fontWeight: '700', textTransform: 'uppercase' }}>
       [ Add {title} Image Here ]
     </span>
@@ -97,6 +92,7 @@ function App() {
 
   return (
     <>
+      <div className="grain-overlay" />
       <div className="marquee-container" style={{ position: 'sticky', top: 0, zIndex: 100 }}>
         <div className="marquee-content" style={{ display: 'flex', gap: '2rem' }}>
           {[...Array(6)].map((_, i) => (
@@ -105,46 +101,14 @@ function App() {
         </div>
       </div>
 
-      <nav style={{ position: 'fixed', bottom: '2rem', left: '50%', transform: 'translateX(-50%)', zIndex: 100, display: 'flex', gap: '1rem' }}>
+      <nav className="bottom-nav" style={{ position: 'fixed', bottom: '1.5rem', left: '50%', transform: 'translateX(-50%)', zIndex: 100, display: 'flex', gap: '0.75rem' }}>
         <a href="#about" className="sticker-btn">About</a>
         <a href="#work" className="sticker-btn">Work</a>
-        <a href="#contact" className="sticker-btn primary">Hire Me <ArrowRight size={16} /></a>
+        <a href="#contact" className="sticker-btn primary">Hire Me <ArrowRight size={14} /></a>
       </nav>
 
-      {/* HERO SECTION */}
-      <section className="section hero container" id="home">
-        <motion.div
-          initial={{ opacity: 0, x: -50 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-          className="hero-text"
-        >
-          <motion.h1 className="hero-title" style={{ y: yBg }}>
-            <span className="hero-title-name">Sanika</span>
-            <span className="hero-title-name">Kannawar</span>
-            <span className="hero-title-tagline">
-              <span className="text-red">Designer</span> & <span className="text-blue">Illustrator.</span>
-            </span>
-          </motion.h1>
-          <p className="hero-subtitle">
-            Fresh, distinct, and thoughtfully executed designer.
-          </p>
-        </motion.div>
-
-        <motion.div
-          className="sticker"
-          style={{
-            top: '5%', left: '2%', width: '80px', height: '80px',
-            backgroundColor: 'var(--color-accent-red)', display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontFamily: 'var(--font-heading)', fontWeight: 800, color: '#fff', transform: 'rotate(-10deg)', fontSize: '1.5rem'
-          }}
-          whileHover={{ scale: 1.2, rotate: 0 }}
-          drag
-          dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
-        >
-          ✦
-        </motion.div>
-      </section>
+      {/* HERO SECTION — GSAP Z-axis Parallax Reveal */}
+      <HeroReveal />
 
       {/* ABOUT SECTION */}
       <section className="section container" id="about">
@@ -183,53 +147,11 @@ function App() {
         </div>
       </section>
 
-      {/* WORK / PORTFOLIO SECTION */}
-      <section className="section container" id="work">
-        <h2 style={{ fontSize: 'clamp(3rem, 6vw, 5rem)', textTransform: 'uppercase', borderBottom: '2px solid var(--color-border)', paddingBottom: '1rem', marginBottom: '2rem' }}>
-          MY WORK
-        </h2>
+      {/* SEQUENTIAL IMAGE REVEAL */}
+      <SequentialImageReveal />
 
-        <div className="portfolio-grid">
-          {portfolioItems.map((item, index) => (
-            <motion.div
-              className="portfolio-card"
-              id={`project-${item.id}`}
-              key={item.id}
-              layoutId={`project-${item.id}`}
-              onClick={() => setSelectedProject(item)}
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-              style={{ cursor: 'pointer' }}
-            >
-              <div className="portfolio-image">
-                {/* 
-                  TODO: Replace the ImagePlaceholder below with your actual img tags when ready!
-                  Example: 
-                  <img src="/posters/mythological-poster.jpg" alt={item.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                */}
-                {item.images ? (
-                  <img src={item.images[0]} alt={item.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                ) : (
-                  <ImagePlaceholder color={item.color} title={item.title} />
-                )}
-              </div>
-              <div className="portfolio-card-content">
-                <motion.h3 className="portfolio-card-title" layoutId={`title-${item.id}`}>{item.title}</motion.h3>
-                <div className="portfolio-card-tags">
-                  {item.tags.map(tag => (
-                    <span className="tag" key={tag}>{tag}</span>
-                  ))}
-                </div>
-                <p style={{ fontSize: '0.9rem', color: 'var(--color-text-light)' }}>
-                  {item.desc}
-                </p>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      </section>
+      {/* WORK — GSAP Horizontal Scroll */}
+      <HorizontalWork portfolioItems={portfolioItems} onProjectClick={setSelectedProject} />
 
       {/* EXPERIENCE / TIMELINE */}
       <section className="section container" id="experience">
@@ -265,7 +187,7 @@ function App() {
       </section>
 
       {/* FOOTER / CONTACT */}
-      <footer className="footer" id="contact" style={{ paddingBottom: '120px' }}>
+      <footer className="footer" id="contact" style={{ paddingBottom: '100px' }}>
         <div className="container" style={{ position: 'relative', zIndex: 2 }}>
           <motion.h2
             className="footer-heading"
@@ -309,19 +231,19 @@ function App() {
               backgroundColor: 'var(--color-bg)',
               zIndex: 1000,
               overflowY: 'auto',
-              padding: '2rem 0',
+              padding: '1.5rem 0',
               fontFamily: 'var(--font-body)'
             }}
           >
-            <div className="container" style={{ position: 'relative' }}>
+            <div className="container" style={{ position: 'relative', paddingBottom: '4rem' }}>
               <motion.button
-                whileHover={{ scale: 1.1 }}
+                whileHover={{ scale: 1.1, translateY: 2, boxShadow: 'var(--shadow-sticker-hover)' }}
                 whileTap={{ scale: 0.9 }}
                 onClick={() => setSelectedProject(null)}
                 style={{
                   position: 'fixed', top: '2rem', right: '5%',
-                  background: 'var(--color-accent-red)', color: 'white',
-                  border: '2px solid var(--color-border)', borderRadius: '50%',
+                  background: 'var(--color-accent-red)', color: 'var(--color-text)',
+                  border: '3px solid var(--color-bg)', borderRadius: '255px 15px 225px 15px/15px 225px 15px 255px',
                   width: '50px', height: '50px',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   cursor: 'pointer', zIndex: 1010, boxShadow: 'var(--shadow-sticker)'
@@ -348,7 +270,7 @@ function App() {
                     }
                     
                     return (
-                      <div style={{ position: 'relative', width: '95%', maxWidth: spreads[currentImageIndex].length > 1 ? '1200px' : '600px', margin: '0 auto', height: '75vh', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'max-width 0.5s ease' }}>
+                      <div style={{ position: 'relative', width: '100%', maxWidth: spreads[currentImageIndex].length > 1 ? '1000px' : '500px', margin: '0 auto', height: '65vh', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'max-width 0.5s ease' }}>
                         <AnimatePresence mode="wait">
                           <motion.div
                             key={currentImageIndex}
@@ -421,13 +343,13 @@ function App() {
                         {/* Arrows */}
                         <button 
                           onClick={() => setCurrentImageIndex((prev) => (prev === 0 ? spreads.length - 1 : prev - 1))}
-                          style={{ position: 'absolute', left: '-5rem', top: '50%', transform: 'translateY(-50%)', background: 'var(--color-accent-blue)', borderRadius: '50%', border: 'none', width: '60px', height: '60px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: 'white', boxShadow: 'var(--shadow-sticker)' }}
+                          style={{ position: 'absolute', left: '0.5rem', top: '50%', transform: 'translateY(-50%)', background: 'var(--color-accent-yellow)', borderRadius: '50%', border: 'none', width: '44px', height: '44px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: 'var(--color-bg)', boxShadow: 'var(--shadow-sticker)', zIndex: 10 }}
                         >
                           <ChevronLeft size={32} />
                         </button>
                         <button 
                           onClick={() => setCurrentImageIndex((prev) => (prev === spreads.length - 1 ? 0 : prev + 1))}
-                          style={{ position: 'absolute', right: '-5rem', top: '50%', transform: 'translateY(-50%)', background: 'var(--color-accent-blue)', borderRadius: '50%', border: 'none', width: '60px', height: '60px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: 'white', boxShadow: 'var(--shadow-sticker)' }}
+                          style={{ position: 'absolute', right: '0.5rem', top: '50%', transform: 'translateY(-50%)', background: 'var(--color-accent-yellow)', borderRadius: '50%', border: 'none', width: '44px', height: '44px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: 'var(--color-bg)', boxShadow: 'var(--shadow-sticker)', zIndex: 10 }}
                         >
                           <ChevronRight size={32} />
                         </button>
@@ -462,13 +384,13 @@ function App() {
                     {/* Navigation Buttons */}
                     <button 
                       onClick={() => setCurrentImageIndex((prev) => (prev === 0 ? selectedProject.images.length - 1 : prev - 1))}
-                      style={{ position: 'absolute', left: '-4rem', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--color-text)' }}
+                      style={{ position: 'absolute', left: '0.5rem', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--color-text)', zIndex: 10 }}
                     >
                       <ChevronLeft size={48} />
                     </button>
                     <button 
                       onClick={() => setCurrentImageIndex((prev) => (prev === selectedProject.images.length - 1 ? 0 : prev + 1))}
-                      style={{ position: 'absolute', right: '-4rem', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--color-text)' }}
+                      style={{ position: 'absolute', right: '0.5rem', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--color-text)', zIndex: 10 }}
                     >
                       <ChevronRight size={48} />
                     </button>
