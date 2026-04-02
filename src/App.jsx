@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
-import { ArrowRight, Mail, Instagram, Phone, X } from 'lucide-react';
+import { ArrowRight, Mail, Instagram, Phone, X, ChevronLeft, ChevronRight } from 'lucide-react';
 
 const portfolioItems = [
   {
@@ -29,6 +29,8 @@ const portfolioItems = [
     tags: ["Editorial", "Print"],
     color: "var(--color-accent-yellow)",
     desc: "An 80+ page publication combining dense typography with illustrated folklore inserts.",
+    images: ["/vikram/1.png", "/vikram/2.png", "/vikram/3.png", "/vikram/4.png", "/vikram/5.png", "/vikram/6.png", "/vikram/7.png", "/vikram/8.png", "/vikram/9.png"],
+    isCarousel: true
   },
   {
     id: 5,
@@ -77,6 +79,12 @@ function App() {
   const { scrollYProgress } = useScroll();
   const yBg = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
   const [selectedProject, setSelectedProject] = useState(null);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  // Reset carousel index when opening a new project
+  useEffect(() => {
+    setCurrentImageIndex(0);
+  }, [selectedProject]);
 
   // Prevent background scrolling when modal is open
   useEffect(() => {
@@ -330,32 +338,74 @@ function App() {
               </p>
 
               {selectedProject.images && selectedProject.images.length > 0 ? (
-                <div style={{
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-                  gap: '2rem',
-                  maxWidth: '1000px',
-                  margin: '0 auto',
-                  padding: '1rem'
-                }}>
-                  {selectedProject.images.map((img, i) => (
-                    <motion.div
-                      key={i}
-                      initial={{ opacity: 0, y: 50 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.2 + (i * 0.1), duration: 0.6 }}
-                      style={{
-                        overflow: 'hidden',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        maxHeight: '450px' /* Increased slightly for better fit */
-                      }}
+                selectedProject.isCarousel ? (
+                  /* CAROUSEL VIEW */
+                  <div style={{ position: 'relative', width: '100%', maxWidth: '800px', margin: '0 auto', height: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <AnimatePresence mode="wait">
+                      <motion.div
+                        key={currentImageIndex}
+                        initial={{ opacity: 0, x: 20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: -20 }}
+                        transition={{ duration: 0.3 }}
+                        style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                      >
+                        <img 
+                          src={selectedProject.images[currentImageIndex]} 
+                          alt={`${selectedProject.title} ${currentImageIndex + 1}`} 
+                          style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', boxShadow: 'var(--shadow-card)', borderRadius: '12px' }} 
+                        />
+                      </motion.div>
+                    </AnimatePresence>
+
+                    {/* Pagination Info */}
+                    <div style={{ position: 'absolute', bottom: '-3rem', left: '50%', transform: 'translateX(-50%)', fontWeight: 700, opacity: 0.6 }}>
+                      {currentImageIndex + 1} / {selectedProject.images.length}
+                    </div>
+
+                    {/* Navigation Buttons */}
+                    <button 
+                      onClick={() => setCurrentImageIndex((prev) => (prev === 0 ? selectedProject.images.length - 1 : prev - 1))}
+                      style={{ position: 'absolute', left: '-4rem', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--color-text)' }}
                     >
-                      <img src={img} alt={`${selectedProject.title} ${i + 1}`} style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', display: 'block', borderRadius: '8px' }} />
-                    </motion.div>
-                  ))}
-                </div>
+                      <ChevronLeft size={48} />
+                    </button>
+                    <button 
+                      onClick={() => setCurrentImageIndex((prev) => (prev === selectedProject.images.length - 1 ? 0 : prev + 1))}
+                      style={{ position: 'absolute', right: '-4rem', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--color-text)' }}
+                    >
+                      <ChevronRight size={48} />
+                    </button>
+                  </div>
+                ) : (
+                  /* GRID VIEW (Default) */
+                  <div style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+                    gap: '2rem',
+                    maxWidth: '1000px',
+                    margin: '0 auto',
+                    padding: '1rem'
+                  }}>
+                    {selectedProject.images.map((img, i) => (
+                      <motion.div
+                        key={i}
+                        initial={{ opacity: 0, y: 50 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.2 + (i * 0.1), duration: 0.6 }}
+                        style={{
+                          overflow: 'hidden',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          maxHeight: '450px'
+                        }}
+                      >
+                        <img src={img} alt={`${selectedProject.title} ${i + 1}`} style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', display: 'block', borderRadius: '8px' }} />
+                      </motion.div>
+                    ))}
+                  </div>
+                )
               ) : (
                 <div style={{ height: '400px', border: '2px dashed var(--color-border)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '2rem', color: 'var(--color-text-light)' }}>Images coming soon...</h3>
