@@ -16,7 +16,10 @@ export default function HorizontalWork({ portfolioItems, onProjectClick }) {
     if (!panels.length) return;
 
     // Dynamically calculate scroll distance for responsive resizing
-    const getTotalWidth = () => trackRef.current.scrollWidth - window.innerWidth;
+    const getTotalWidth = () => {
+      // scrollWidth includes the flex gap and the ::after padding
+      return trackRef.current.scrollWidth - window.innerWidth;
+    };
 
     const tween = gsap.to(track, {
       x: () => -getTotalWidth(),
@@ -24,16 +27,23 @@ export default function HorizontalWork({ portfolioItems, onProjectClick }) {
       scrollTrigger: {
         trigger: sectionRef.current,
         pin: true,
-        scrub: true, 
-        end: () => `+=${getTotalWidth() * 1.5}`, 
+        scrub: 1, // Smoother scrub
+        end: () => `+=${trackRef.current.scrollWidth}`, 
         invalidateOnRefresh: true,
+        fastScrollEnd: true,
       },
     });
 
+    // Refresh after a small delay to catch image loads
+    setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 500);
+
     // Animate each panel's content as it enters viewport
-    panels.forEach((panel) => {
+    panels.forEach((panel, i) => {
       const img = panel.querySelector('.portfolio-image img');
       const content = panel.querySelector('.portfolio-card-content');
+      const isLast = i === panels.length - 1;
 
       if (img) {
         gsap.fromTo(img,
@@ -41,12 +51,12 @@ export default function HorizontalWork({ portfolioItems, onProjectClick }) {
           {
             scale: 1,
             opacity: 1,
-            ease: 'none', // Smooth linear scrub
+            ease: 'none',
             scrollTrigger: {
               trigger: panel,
               containerAnimation: tween,
               start: 'left right',
-              end: 'right left',
+              end: isLast ? 'left 40%' : 'right left',
               scrub: true,
             },
           }
@@ -63,8 +73,8 @@ export default function HorizontalWork({ portfolioItems, onProjectClick }) {
             scrollTrigger: {
               trigger: panel,
               containerAnimation: tween,
-              start: 'left 85%',
-              end: 'left 45%',
+              start: 'left 95%', // Starts earlier
+              end: isLast ? 'left 60%' : 'left 45%', // Reaches full opacity much earlier for the last item
               scrub: true,
             },
           }
@@ -104,13 +114,13 @@ export default function HorizontalWork({ portfolioItems, onProjectClick }) {
                 )}
               </div>
               <div className="portfolio-card-content" style={{ flex: 1 }}>
-                <h3 className="portfolio-card-title">{item.title}</h3>
+                <h3 className="portfolio-card-title" style={{ color: item.color === 'var(--color-text)' ? 'var(--color-bg)' : 'var(--color-bg)' }}>{item.title}</h3>
                 <div className="portfolio-card-tags">
                   {item.tags.map(tag => (
                     <span className="tag" key={tag}>{tag}</span>
                   ))}
                 </div>
-                <p className="hw-panel-desc" style={{ color: 'var(--color-bg)', opacity: 0.8 }}>{item.desc}</p>
+                <p className="hw-panel-desc" style={{ color: 'var(--color-bg)', opacity: 1, fontWeight: 500 }}>{item.desc}</p>
               </div>
             </div>
           </div>

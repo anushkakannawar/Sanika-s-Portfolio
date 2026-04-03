@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
-import { ArrowRight, Mail, Instagram, Phone, X, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ArrowRight, Mail, Instagram, Linkedin, X, ChevronLeft, ChevronRight } from 'lucide-react';
 import HeroReveal from './components/HeroReveal';
 import HorizontalWork from './components/HorizontalWork';
 import SequentialImageReveal from './components/SequentialImageReveal';
@@ -34,7 +34,7 @@ const portfolioItems = [
     color: "var(--color-text)",
     desc: "Menus, coasters, and brand collateral giving a fresh, distinct vibe to Blondie Hospitality.",
     images: ["/blondie/blondie1.jpg", "/blondie/blondie2.jpg", "/blondie/blondie3.jpg", "/blondie/blondie4.jpg", "/blondie/blondie5.jpg", "/blondie/blondie6.jpg", "/blondie/blondie7.jpg", "/blondie/blondie8.jpg"],
-
+    color: "var(--color-accent-blue)"
   }
 ];
 
@@ -47,7 +47,8 @@ const experienceItems = [
     date: "Dec 2025 - Present · 4 mos",
     location: "Mumbai, Maharashtra, India · Remote",
     desc: "Design Intern at Bastian’s Blondie, working on playful and engaging visual creatives for social media, events, and print. Supporting brand storytelling through thoughtful, fun, and feel good designs!!",
-    projectId: 5
+    projectId: 5,
+    externalLink: "https://www.instagram.com/mumbaiblondie/"
   },
   {
     id: "ccf",
@@ -57,7 +58,8 @@ const experienceItems = [
     date: "Aug 2025 - Present · 8 mos",
     location: "New Delhi, Delhi, India · Remote",
     desc: "Visual Design Intern at CCF, creating illustrations and digital designs for social media, websites, and print. Learning on the go, experimenting with visuals, and helping bring stories to life online.",
-    projectId: 4
+    projectId: 4,
+    externalLink: "https://www.instagram.com/ccf.india/"
   }
 ];
 
@@ -104,7 +106,7 @@ function App() {
       <nav className="bottom-nav" style={{ position: 'fixed', bottom: '1.5rem', left: '50%', transform: 'translateX(-50%)', zIndex: 100, display: 'flex', gap: '0.75rem' }}>
         <a href="#about" className="sticker-btn">About</a>
         <a href="#work" className="sticker-btn">Work</a>
-        <a href="#contact" className="sticker-btn primary">Hire Me <ArrowRight size={14} /></a>
+        <a href="#contact" className="sticker-btn">Contact</a>
       </nav>
 
       {/* HERO SECTION — GSAP Z-axis Parallax Reveal */}
@@ -172,7 +174,12 @@ function App() {
               <div className="timeline-date">{exp.date}</div>
               <h3 className="timeline-role">{exp.role}</h3>
               <div className="timeline-company" style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '0.5rem' }}>
-                <a href={`#project-${exp.projectId}`} style={{ textDecoration: 'underline', textDecorationThickness: '2px', textUnderlineOffset: '4px', color: 'var(--color-accent-blue)' }}>
+                <a 
+                  href={exp.externalLink || `#project-${exp.projectId}`} 
+                  target={exp.externalLink ? "_blank" : "_self"}
+                  rel={exp.externalLink ? "noopener noreferrer" : ""}
+                  style={{ textDecoration: 'underline', textDecorationThickness: '2px', textUnderlineOffset: '4px', color: 'var(--color-accent-blue)' }}
+                >
                   {exp.company}
                 </a>
                 <span style={{ opacity: 0.6 }}>· {exp.type}</span>
@@ -206,8 +213,8 @@ function App() {
             <a href="mailto:kannawarsanika@gmail.com" className="sticker-btn">
               <Mail size={20} /> Email Me
             </a>
-            <a href="tel:+919552281805" className="sticker-btn">
-              <Phone size={20} /> Let's Talk
+            <a href="https://www.linkedin.com/in/sanika-kannawar-242394237/" target="_blank" rel="noreferrer" className="sticker-btn">
+              <Linkedin size={20} /> LinkedIn
             </a>
           </div>
         </div>
