@@ -348,95 +348,145 @@ function App() {
                 }
 
                 if (selectedProject.isFlipbook) {
-                  /* FLIPBOOK VIEW */
-                  // Group images into spreads: [1], [2,3], [4,5], etc.
-                  const spreads = [[displayImages[0]]];
-                  for (let i = 1; i < displayImages.length; i += 2) {
-                    spreads.push(displayImages.slice(i, i + 2));
+                  /* FLIPBOOK VIEW (Realistic 3D) */
+                  const leaves = [];
+                  for (let i = 0; i < displayImages.length; i += 2) {
+                    leaves.push({
+                      front: displayImages[i],
+                      back: displayImages[i + 1] || null
+                    });
                   }
+
+                  const isFirst = currentImageIndex === 0;
+                  const isLast = currentImageIndex === leaves.length;
 
                   return (
                     <div style={{ position: 'relative', width: '100%', margin: '0 auto', height: '65vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                      <AnimatePresence mode="wait">
-                        <motion.div
-                          key={`${activeVolumeIndex}-${currentImageIndex}`}
-                          initial={{ opacity: 0, x: 20 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          exit={{ opacity: 0, x: -20 }}
-                          style={{
-                            height: '100%',
-                            maxWidth: '90vw',
-                            display: 'flex',
-                            gap: '2px',
-                            backgroundColor: spreads[currentImageIndex].length > 1 ? 'rgba(0,0,0,0.1)' : 'transparent',
-                            borderRadius: '12px',
-                            overflow: 'hidden',
-                            boxShadow: spreads[currentImageIndex].length > 1 ? '0 30px 60px rgba(0,0,0,0.4)' : 'none',
-                            perspective: '2000px'
-                          }}
-                        >
-                          {spreads[currentImageIndex].map((img, idx) => (
+                      <motion.div 
+                        initial={false}
+                        animate={{ x: isFirst ? '0%' : (isLast ? '100%' : '50%') }}
+                        transition={{ duration: 0.8, ease: [0.25, 1, 0.5, 1] }}
+                        style={{
+                          position: 'relative',
+                          height: '95%',
+                          aspectRatio: '3/4', // Standard robust book aspect ratio per page
+                          maxWidth: '45vw', // Ensures two leaves never exceed screen width
+                          perspective: '3000px',
+                          zIndex: 1
+                        }}
+                      >
+
+                        {leaves.map((leaf, idx) => {
+                          const isFlipped = idx < currentImageIndex;
+                          // Subtle z-translation prevents z-fighting while maintaining the stack height hierarchy
+                          const zOffset = isFlipped ? idx * 1.5 : (leaves.length - idx) * 1.5;
+
+                          return (
                             <motion.div
-                              key={`${activeVolumeIndex}-${currentImageIndex}-${idx}`}
-                              initial={idx === 1 ? { rotateY: 90 } : { opacity: 0 }}
-                              animate={idx === 1 ? { rotateY: 0 } : { opacity: 1 }}
-                              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                              key={idx}
+                              initial={false}
+                              animate={{ 
+                                rotateY: isFlipped ? -180 : 0, 
+                                zIndex: isFlipped ? idx : leaves.length - idx,
+                                z: zOffset
+                              }}
+                              transition={{ duration: 0.8, ease: [0.25, 1, 0.5, 1] }}
                               style={{
+                                position: 'absolute',
+                                top: 0,
+                                left: 0,
+                                width: '100%',
                                 height: '100%',
-                                minWidth: 0,
-                                position: 'relative',
+                                transformOrigin: 'left center', // pivot exactly down the spine edge
+                                transformStyle: 'preserve-3d',
+                                cursor: 'pointer',
+                              }}
+                              onClick={() => {
+                                // If clicking the right side (unflipped), flip it to next. Otherwise flip it back.
+                                if (!isFlipped) setCurrentImageIndex(idx + 1);
+                                else setCurrentImageIndex(idx);
+                              }}
+                            >
+                              {/* FRONT OF LEAF (Right side of open book) */}
+                              <div style={{
+                                position: 'absolute',
+                                inset: 0,
+                                backfaceVisibility: 'hidden',
+                                backgroundColor: '#F4F1EA',
+                                borderRadius: '0 8px 8px 0',
+                                boxShadow: isFlipped ? 'none' : 'inset 15px 0 20px -10px rgba(0,0,0,0.1), 5px 5px 15px rgba(0,0,0,0.1)',
+                                overflow: 'hidden',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
-                                boxShadow: spreads[currentImageIndex].length > 1
-                                  ? (idx === 0 ? 'inset -15px 0 30px rgba(0,0,0,0.2)' : 'inset 15px 0 30px rgba(0,0,0,0.2)')
-                                  : 'none',
-                                borderRadius: spreads[currentImageIndex].length > 1
-                                  ? (idx === 0 ? '12px 0 0 12px' : '0 12px 12px 0')
-                                  : '12px',
+                                borderLeft: '1px solid rgba(0,0,0,0.05)'
+                              }}>
+                                {/* Inner binding lighting gradient */}
+                                <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to right, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0) 8%, rgba(255,255,255,0) 80%, rgba(255,255,255,0.2) 100%)', zIndex: 2, pointerEvents: 'none' }} />
+                                <img src={leaf.front} alt={`Page front`} style={{ width: '100%', height: '100%', objectFit: 'contain', position: 'relative', zIndex: 1 }} />
+                              </div>
+
+                              {/* BACK OF LEAF (Left side of open book once flipped) */}
+                              <div style={{
+                                position: 'absolute',
+                                inset: 0,
+                                backfaceVisibility: 'hidden',
+                                backgroundColor: '#F4F1EA',
+                                borderRadius: '0 8px 8px 0', 
+                                boxShadow: isFlipped ? 'inset 15px 0 20px -10px rgba(0,0,0,0.1), 5px 5px 15px rgba(0,0,0,0.1)' : 'none',
                                 overflow: 'hidden',
-                                transformOrigin: idx === 1 ? 'left' : 'center',
-                                zIndex: idx === 1 ? 5 : 1
-                              }}
-                            >
-                              <img
-                                src={img}
-                                alt={`${selectedProject.title} ${currentImageIndex}-${idx}`}
-                                style={{ width: 'auto', height: '100%', maxWidth: '100%', objectFit: 'contain', display: 'block' }}
-                              />
-                              {spreads[currentImageIndex].length > 1 && (
-                                <div style={{
-                                  position: 'absolute',
-                                  top: 0,
-                                  bottom: 0,
-                                  width: '40px',
-                                  background: idx === 0
-                                    ? 'linear-gradient(to right, transparent, rgba(0,0,0,0.3))'
-                                    : 'linear-gradient(to left, transparent, rgba(0,0,0,0.3))',
-                                  left: idx === 0 ? 'auto' : 0,
-                                  right: idx === 0 ? 0 : 'auto',
-                                  zIndex: 2
-                                }} />
-                              )}
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                transform: 'rotateY(180deg)',
+                                borderLeft: '1px solid rgba(0,0,0,0.05)'
+                              }}>
+                                <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to right, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0) 8%, rgba(255,255,255,0) 80%, rgba(255,255,255,0.2) 100%)', zIndex: 2, pointerEvents: 'none' }} />
+                                {leaf.back ? (
+                                  <img src={leaf.back} alt={`Page back`} style={{ width: '100%', height: '100%', objectFit: 'contain', position: 'relative', zIndex: 1 }} />
+                                ) : (
+                                  <div style={{ width: '100%', height: '100%', background: '#E0DFD5' }} /> // Empty back cover
+                                )}
+                              </div>
                             </motion.div>
-                          ))}
-                        </motion.div>
-                      </AnimatePresence>
+                          );
+                        })}
+
+                        {/* HARDCOVER SPINE AND BINDING VISUALS (Static anchor) */}
+                        <motion.div
+                          animate={{ opacity: isFirst || isLast ? 0 : 1 }}
+                          transition={{ duration: 0.4 }}
+                          style={{
+                            position: 'absolute',
+                            top: '2%',
+                            bottom: '2%',
+                            left: '-12px',
+                            width: '24px',
+                            backgroundColor: '#DCDBCF',
+                            borderRadius: '12px',
+                            zIndex: -1,
+                            boxShadow: 'inset -2px 0 5px rgba(0,0,0,0.1), inset 2px 0 5px rgba(0,0,0,0.1), 0 0 20px rgba(0,0,0,0.15)',
+                            transform: 'translateZ(-5px)'
+                          }} 
+                        />
+                      </motion.div>
 
                       <div style={{ position: 'absolute', bottom: '-4.5rem', left: '50%', transform: 'translateX(-50%)', fontWeight: 700, opacity: 0.6, fontSize: '1.1rem', letterSpacing: '0.1em', whiteSpace: 'nowrap', textAlign: 'center' }}>
                         {selectedProject.volumes && <div style={{ fontSize: '0.8rem', marginBottom: '0.3rem', color: 'var(--color-accent-yellow)' }}>{selectedProject.volumes[activeVolumeIndex].title.toUpperCase()}</div>}
-                        SPREAD {currentImageIndex + 1} / {spreads.length}
+                        FLIP {currentImageIndex} / {leaves.length}
                       </div>
 
                       <button
-                        onClick={() => setCurrentImageIndex((prev) => (prev === 0 ? spreads.length - 1 : prev - 1))}
-                        style={{ position: 'absolute', left: '0.5rem', top: '50%', transform: 'translateY(-50%)', background: 'var(--color-accent-yellow)', borderRadius: '50%', border: 'none', width: '44px', height: '44px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: 'var(--color-bg)', boxShadow: 'var(--shadow-sticker)', zIndex: 10 }}
+                        onClick={() => setCurrentImageIndex((prev) => Math.max(prev - 1, 0))}
+                        style={{ position: 'absolute', left: '0.5rem', top: '50%', transform: 'translateY(-50%)', background: 'var(--color-accent-yellow)', borderRadius: '50%', border: 'none', width: '44px', height: '44px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: 'var(--color-bg)', boxShadow: 'var(--shadow-sticker)', zIndex: 10, opacity: currentImageIndex === 0 ? 0.3 : 1 }}
+                        disabled={currentImageIndex === 0}
                       >
                         <ChevronLeft size={32} />
                       </button>
                       <button
-                        onClick={() => setCurrentImageIndex((prev) => (prev === spreads.length - 1 ? 0 : prev + 1))}
-                        style={{ position: 'absolute', right: '0.5rem', top: '50%', transform: 'translateY(-50%)', background: 'var(--color-accent-yellow)', borderRadius: '50%', border: 'none', width: '44px', height: '44px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: 'var(--color-bg)', boxShadow: 'var(--shadow-sticker)', zIndex: 10 }}
+                        onClick={() => setCurrentImageIndex((prev) => Math.min(prev + 1, leaves.length))}
+                        style={{ position: 'absolute', right: '0.5rem', top: '50%', transform: 'translateY(-50%)', background: 'var(--color-accent-yellow)', borderRadius: '50%', border: 'none', width: '44px', height: '44px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: 'var(--color-bg)', boxShadow: 'var(--shadow-sticker)', zIndex: 10, opacity: currentImageIndex === leaves.length ? 0.3 : 1 }}
+                        disabled={currentImageIndex === leaves.length}
                       >
                         <ChevronRight size={32} />
                       </button>
@@ -498,18 +548,12 @@ function App() {
                     {displayImages.map((img, i) => (
                       <motion.div
                         key={i}
+                        className="lively-image-container"
                         initial={{ opacity: 0, y: 50 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.2 + (i * 0.1), duration: 0.6 }}
-                        style={{
-                          overflow: 'hidden',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          maxHeight: '450px'
-                        }}
                       >
-                        <img src={img} alt={`${selectedProject.title} ${i + 1}`} style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', display: 'block', borderRadius: '8px' }} />
+                        <img src={img} alt={`${selectedProject.title} ${i + 1}`} className="lively-image" />
                       </motion.div>
                     ))}
                   </div>
