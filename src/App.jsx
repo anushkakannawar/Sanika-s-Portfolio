@@ -20,7 +20,7 @@ const portfolioItems = [
 
   {
     id: 4,
-    title: "Folklore Compendium",
+    title: "CCF India",
     tags: ["Editorial", "Print"],
     color: "var(--color-accent-yellow)",
     desc: "A series of 80+ page publications combining dense typography with illustrated folklore inserts. This volume explores various mythical and cultural narratives across different editions.",
@@ -75,7 +75,7 @@ const portfolioItems = [
     tags: ["Branding", "Print"],
     color: "var(--color-text)",
     desc: "Menus, coasters, and brand collateral giving a fresh, distinct vibe to Blondie Hospitality.",
-    images: ["/blondie/blondie1.jpg", "/blondie/blondie2.jpg", "/blondie/blondie3.jpg", "/blondie/blondie4.jpg", "/blondie/blondie5.jpg", "/blondie/blondie6.jpg", "/blondie/blondie7.jpg", "/blondie/blondie8.jpg"],
+    images: ["/blondie/blondie1.jpg", "/blondie/blondie2.jpg", "/blondie/blondie3.jpg", "/blondie/blondie4.jpg", "/blondie/blondie5.jpg", "/blondie/blondie6.jpg"],
     color: "var(--color-accent-blue)"
   }
 ];
@@ -202,7 +202,7 @@ function App() {
       {/* EXPERIENCE / TIMELINE */}
       <section className="section container" id="experience">
         <h2 style={{ fontSize: 'clamp(3rem, 6vw, 5rem)', textTransform: 'uppercase', marginBottom: '2rem' }}>
-          Experience
+          WORK TIMELINE
         </h2>
 
         <div className="timeline">
@@ -335,8 +335,8 @@ function App() {
 
               {(() => {
                 // Determine which images to show (single set or active volume)
-                const displayImages = selectedProject.volumes 
-                  ? selectedProject.volumes[activeVolumeIndex].images 
+                const displayImages = selectedProject.volumes
+                  ? selectedProject.volumes[activeVolumeIndex].images
                   : selectedProject.images;
 
                 if (!displayImages || displayImages.length === 0) {
@@ -356,7 +356,7 @@ function App() {
                   }
 
                   return (
-                    <div style={{ position: 'relative', width: '100%', maxWidth: spreads[currentImageIndex].length > 1 ? '1000px' : '500px', margin: '0 auto', height: '65vh', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'max-width 0.5s ease' }}>
+                    <div style={{ position: 'relative', width: '100%', margin: '0 auto', height: '65vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                       <AnimatePresence mode="wait">
                         <motion.div
                           key={`${activeVolumeIndex}-${currentImageIndex}`}
@@ -364,8 +364,8 @@ function App() {
                           animate={{ opacity: 1, x: 0 }}
                           exit={{ opacity: 0, x: -20 }}
                           style={{
-                            width: '100%',
                             height: '100%',
+                            maxWidth: '90vw',
                             display: 'flex',
                             gap: '2px',
                             backgroundColor: spreads[currentImageIndex].length > 1 ? 'rgba(0,0,0,0.1)' : 'transparent',
@@ -382,8 +382,8 @@ function App() {
                               animate={idx === 1 ? { rotateY: 0 } : { opacity: 1 }}
                               transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
                               style={{
-                                flex: 1,
                                 height: '100%',
+                                minWidth: 0,
                                 position: 'relative',
                                 display: 'flex',
                                 alignItems: 'center',
@@ -402,7 +402,7 @@ function App() {
                               <img
                                 src={img}
                                 alt={`${selectedProject.title} ${currentImageIndex}-${idx}`}
-                                style={{ width: '100%', height: '100%', objectFit: spreads[currentImageIndex].length > 1 ? 'cover' : 'contain', display: 'block' }}
+                                style={{ width: 'auto', height: '100%', maxWidth: '100%', objectFit: 'contain', display: 'block' }}
                               />
                               {spreads[currentImageIndex].length > 1 && (
                                 <div style={{
@@ -417,7 +417,7 @@ function App() {
                                   right: idx === 0 ? 0 : 'auto',
                                   zIndex: 2
                                 }} />
-                               )}
+                              )}
                             </motion.div>
                           ))}
                         </motion.div>

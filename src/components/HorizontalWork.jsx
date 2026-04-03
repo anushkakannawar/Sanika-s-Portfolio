@@ -89,7 +89,7 @@ export default function HorizontalWork({ portfolioItems, onProjectClick }) {
         {/* Title panel */}
         <div className="hw-panel hw-panel-intro">
           <div className="hw-panel-content">
-            <h2 className="hw-title">MY WORK</h2>
+            <h2 className="hw-title">EXPERIENCE</h2>
             <p className="hw-subtitle">
               Scroll to explore selected projects →
             </p>

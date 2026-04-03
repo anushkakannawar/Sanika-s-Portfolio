@@ -712,7 +712,7 @@ nav {
 }
 
 .hw-title {
-  font-size: clamp(3rem, 8vw, 7rem);
+  font-size: clamp(2rem, 5vw, 4.5rem);
   text-transform: uppercase;
   line-height: 0.9;
   letter-spacing: -0.04em;
