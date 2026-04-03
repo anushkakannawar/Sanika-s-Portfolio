@@ -6,7 +6,7 @@ import HorizontalWork from './components/HorizontalWork';
 import SequentialImageReveal from './components/SequentialImageReveal';
 
 const portfolioItems = [
-  
+
   {
     id: 2,
     title: "Kacchapapad",
@@ -23,9 +23,51 @@ const portfolioItems = [
     title: "Folklore Compendium",
     tags: ["Editorial", "Print"],
     color: "var(--color-accent-yellow)",
-    desc: "An 80+ page publication combining dense typography with illustrated folklore inserts.",
-    images: ["/vikram/1.png", "/vikram/2.png", "/vikram/3.png", "/vikram/4.png", "/vikram/5.png", "/vikram/6.png", "/vikram/7.png", "/vikram/8.png", "/vikram/9.png"],
-    isFlipbook: true
+    desc: "A series of 80+ page publications combining dense typography with illustrated folklore inserts. This volume explores various mythical and cultural narratives across different editions.",
+    images: ["/vikram/1.png"], // Thumbnail for the gallery
+    isFlipbook: true,
+    volumes: [
+      {
+        title: "Vikram & Vetala",
+        id: "vikram",
+        images: ["/vikram/1.png", "/vikram/2.png", "/vikram/3.png", "/vikram/4.png", "/vikram/5.png", "/vikram/6.png", "/vikram/7.png", "/vikram/8.png", "/vikram/9.png"]
+      },
+      {
+        title: "Female Identity",
+        id: "female",
+        images: ["/female/1.png", "/female/2.png", "/female/3.png", "/female/4.png", "/female/5.png", "/female/6.png", "/female/7.png", "/female/8.png"]
+      },
+      {
+        title: "Hornbill",
+        id: "hornbill",
+        images: ["/hornbill/1.png", "/hornbill/2.png", "/hornbill/3.png", "/hornbill/4.png", "/hornbill/5.png", "/hornbill/6.png", "/hornbill/7.png", "/hornbill/8.png", "/hornbill/9.png", "/hornbill/10.png", "/hornbill/12.png"]
+      },
+      {
+        title: "Constitution",
+        id: "constitution",
+        images: ["/constitution/1.png", "/constitution/2.png", "/constitution/3.png", "/constitution/4.png", "/constitution/5.png", "/constitution/6.png", "/constitution/7.png", "/constitution/8.png", "/constitution/9.png", "/constitution/10.png", "/constitution/11.png", "/constitution/12.png"]
+      },
+      {
+        title: "Final IG",
+        id: "finalig",
+        images: ["/finalig/1.jpg", "/finalig/2.jpg", "/finalig/3.jpg", "/finalig/4.jpg", "/finalig/5.jpg"]
+      },
+      {
+        title: "Tamil",
+        id: "tamil",
+        images: ["/tamil/1.png", "/tamil/2.png", "/tamil/3.png", "/tamil/4.png", "/tamil/5.png", "/tamil/6.png", "/tamil/7.png", "/tamil/8.png"]
+      },
+      {
+        title: "Wetland",
+        id: "wetland",
+        images: ["/wetland/1.png", "/wetland/2.png", "/wetland/3.png", "/wetland/4.png", "/wetland/5.png", "/wetland/6.png", "/wetland/7.png", "/wetland/8.png"]
+      },
+      {
+        title: "Wildlife",
+        id: "wildlife",
+        images: ["/wildlife/1.png", "/wildlife/2.png", "/wildlife/3.png", "/wildlife/4.png", "/wildlife/5.png", "/wildlife/6.png", "/wildlife/7.png", "/wildlife/8.png", "/wildlife/9.png", "/wildlife/10.png", "/wildlife/11.png", "/wildlife/12.png"]
+      }
+    ]
   },
   {
     id: 5,
@@ -77,10 +119,12 @@ function App() {
   const yBg = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
   const [selectedProject, setSelectedProject] = useState(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [activeVolumeIndex, setActiveVolumeIndex] = useState(0);
 
-  // Reset carousel index when opening a new project
+  // Reset carousel index and volume index when opening a new project
   useEffect(() => {
     setCurrentImageIndex(0);
+    setActiveVolumeIndex(0);
   }, [selectedProject]);
 
   // Prevent background scrolling when modal is open
@@ -174,8 +218,8 @@ function App() {
               <div className="timeline-date">{exp.date}</div>
               <h3 className="timeline-role">{exp.role}</h3>
               <div className="timeline-company" style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '0.5rem' }}>
-                <a 
-                  href={exp.externalLink || `#project-${exp.projectId}`} 
+                <a
+                  href={exp.externalLink || `#project-${exp.projectId}`}
                   target={exp.externalLink ? "_blank" : "_self"}
                   rel={exp.externalLink ? "noopener noreferrer" : ""}
                   style={{ textDecoration: 'underline', textDecorationThickness: '2px', textUnderlineOffset: '4px', color: 'var(--color-accent-blue)' }}
@@ -262,148 +306,187 @@ function App() {
               <motion.h2 layoutId={`title-${selectedProject.id}`} style={{ fontSize: 'clamp(2.5rem, 6vw, 5rem)', textTransform: 'uppercase', marginBottom: '1rem', marginTop: '2rem', fontFamily: 'var(--font-heading)' }}>
                 {selectedProject.title}
               </motion.h2>
-              <p style={{ fontSize: '1.2rem', color: 'var(--color-text)', maxWidth: '800px', marginBottom: '3rem', fontWeight: 500 }}>
+              <p style={{ fontSize: '1.2rem', color: 'var(--color-text)', maxWidth: '800px', marginBottom: '1.5rem', fontWeight: 500 }}>
                 {selectedProject.desc}
               </p>
 
-              {selectedProject.images && selectedProject.images.length > 0 ? (
-                selectedProject.isFlipbook ? (
-                  /* FLIPBOOK VIEW */
-                  (() => {
-                    // Group images into spreads: [1], [2,3], [4,5], etc.
-                    const spreads = [[selectedProject.images[0]]];
-                    for (let i = 1; i < selectedProject.images.length; i += 2) {
-                      spreads.push(selectedProject.images.slice(i, i + 2));
-                    }
-                    
-                    return (
-                      <div style={{ position: 'relative', width: '100%', maxWidth: spreads[currentImageIndex].length > 1 ? '1000px' : '500px', margin: '0 auto', height: '65vh', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'max-width 0.5s ease' }}>
-                        <AnimatePresence mode="wait">
-                          <motion.div
-                            key={currentImageIndex}
-                            style={{ 
-                              width: '100%', 
-                              height: '100%', 
-                              display: 'flex', 
-                              gap: '2px', 
-                              backgroundColor: spreads[currentImageIndex].length > 1 ? 'rgba(0,0,0,0.1)' : 'transparent',
-                              borderRadius: '12px',
-                              overflow: 'hidden',
-                              boxShadow: spreads[currentImageIndex].length > 1 ? '0 30px 60px rgba(0,0,0,0.4)' : 'none',
-                              perspective: '2000px'
-                            }}
-                          >
-                            {spreads[currentImageIndex].map((img, idx) => (
-                              <motion.div 
-                                key={`${currentImageIndex}-${idx}`}
-                                initial={idx === 1 ? { rotateY: 90 } : { opacity: 0 }}
-                                animate={idx === 1 ? { rotateY: 0 } : { opacity: 1 }}
-                                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-                                style={{ 
-                                  flex: 1, 
-                                  height: '100%', 
-                                  position: 'relative',
-                                  display: 'flex',
-                                  alignItems: 'center',
-                                  justifyContent: 'center',
-                                  boxShadow: spreads[currentImageIndex].length > 1 
-                                    ? (idx === 0 ? 'inset -15px 0 30px rgba(0,0,0,0.2)' : 'inset 15px 0 30px rgba(0,0,0,0.2)') 
-                                    : 'none',
-                                  borderRadius: spreads[currentImageIndex].length > 1 
-                                    ? (idx === 0 ? '12px 0 0 12px' : '0 12px 12px 0') 
-                                    : '12px',
-                                  overflow: 'hidden',
-                                  transformOrigin: idx === 1 ? 'left' : 'center', /* Pivot from the spine for the right page */
-                                  zIndex: idx === 1 ? 5 : 1
-                                }}
-                              >
-                                <img 
-                                  src={img} 
-                                  alt={`${selectedProject.title} ${currentImageIndex}-${idx}`} 
-                                  style={{ width: '100%', height: '100%', objectFit: spreads[currentImageIndex].length > 1 ? 'cover' : 'contain', display: 'block' }} 
-                                />
-                                {/* Spine Shadow overlay */}
-                                {spreads[currentImageIndex].length > 1 && (
-                                  <div style={{ 
-                                    position: 'absolute', 
-                                    top: 0, 
-                                    bottom: 0, 
-                                    width: '40px', 
-                                    background: idx === 0 
-                                      ? 'linear-gradient(to right, transparent, rgba(0,0,0,0.3))' 
-                                      : 'linear-gradient(to left, transparent, rgba(0,0,0,0.3))',
-                                    left: idx === 0 ? 'auto' : 0,
-                                    right: idx === 0 ? 0 : 'auto',
-                                    zIndex: 2
-                                  }} />
-                                )}
-                              </motion.div>
-                            ))}
-                          </motion.div>
-                        </AnimatePresence>
+              {/* Volume Selector for Projects with Multiple Volumes */}
+              {selectedProject.volumes && (
+                <div style={{ display: 'flex', gap: '1rem', marginBottom: '3rem', flexWrap: 'wrap' }}>
+                  {selectedProject.volumes.map((vol, idx) => (
+                    <button
+                      key={vol.id || idx}
+                      onClick={() => { setActiveVolumeIndex(idx); setCurrentImageIndex(0); }}
+                      className={`sticker-btn ${activeVolumeIndex === idx ? "" : "secondary"}`}
+                      style={{
+                        padding: '0.6rem 1.2rem',
+                        fontSize: '0.9rem',
+                        background: activeVolumeIndex === idx ? 'var(--color-accent-yellow)' : 'transparent',
+                        color: activeVolumeIndex === idx ? 'var(--color-bg)' : 'var(--color-text)',
+                        opacity: activeVolumeIndex === idx ? 1 : 0.7,
+                        boxShadow: activeVolumeIndex === idx ? 'var(--shadow-sticker-hover)' : 'var(--shadow-sticker)'
+                      }}
+                    >
+                      {vol.title}
+                    </button>
+                  ))}
+                </div>
+              )}
 
-                        {/* Pagination */}
-                        <div style={{ position: 'absolute', bottom: '-4rem', left: '50%', transform: 'translateX(-50%)', fontWeight: 700, opacity: 0.6, fontSize: '1.1rem', letterSpacing: '0.1em' }}>
-                          SPREAD {currentImageIndex + 1} / {spreads.length}
-                        </div>
+              {(() => {
+                // Determine which images to show (single set or active volume)
+                const displayImages = selectedProject.volumes 
+                  ? selectedProject.volumes[activeVolumeIndex].images 
+                  : selectedProject.images;
 
-                        {/* Arrows */}
-                        <button 
-                          onClick={() => setCurrentImageIndex((prev) => (prev === 0 ? spreads.length - 1 : prev - 1))}
-                          style={{ position: 'absolute', left: '0.5rem', top: '50%', transform: 'translateY(-50%)', background: 'var(--color-accent-yellow)', borderRadius: '50%', border: 'none', width: '44px', height: '44px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: 'var(--color-bg)', boxShadow: 'var(--shadow-sticker)', zIndex: 10 }}
-                        >
-                          <ChevronLeft size={32} />
-                        </button>
-                        <button 
-                          onClick={() => setCurrentImageIndex((prev) => (prev === spreads.length - 1 ? 0 : prev + 1))}
-                          style={{ position: 'absolute', right: '0.5rem', top: '50%', transform: 'translateY(-50%)', background: 'var(--color-accent-yellow)', borderRadius: '50%', border: 'none', width: '44px', height: '44px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: 'var(--color-bg)', boxShadow: 'var(--shadow-sticker)', zIndex: 10 }}
-                        >
-                          <ChevronRight size={32} />
-                        </button>
-                      </div>
-                    );
-                  })()
-                ) : selectedProject.isCarousel ? (
-                  /* CAROUSEL VIEW */
-                  <div style={{ position: 'relative', width: '100%', maxWidth: '800px', margin: '0 auto', height: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <AnimatePresence mode="wait">
-                      <motion.div
-                        key={currentImageIndex}
-                        initial={{ opacity: 0, x: 20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        exit={{ opacity: 0, x: -20 }}
-                        transition={{ duration: 0.3 }}
-                        style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                      >
-                        <img 
-                          src={selectedProject.images[currentImageIndex]} 
-                          alt={`${selectedProject.title} ${currentImageIndex + 1}`} 
-                          style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', boxShadow: 'var(--shadow-card)', borderRadius: '12px' }} 
-                        />
-                      </motion.div>
-                    </AnimatePresence>
-
-                    {/* Pagination Info */}
-                    <div style={{ position: 'absolute', bottom: '-3rem', left: '50%', transform: 'translateX(-50%)', fontWeight: 700, opacity: 0.6 }}>
-                      {currentImageIndex + 1} / {selectedProject.images.length}
+                if (!displayImages || displayImages.length === 0) {
+                  return (
+                    <div style={{ height: '400px', border: '2px dashed var(--color-border)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '2rem', color: 'var(--color-text-light)' }}>Images coming soon...</h3>
                     </div>
+                  );
+                }
 
-                    {/* Navigation Buttons */}
-                    <button 
-                      onClick={() => setCurrentImageIndex((prev) => (prev === 0 ? selectedProject.images.length - 1 : prev - 1))}
-                      style={{ position: 'absolute', left: '0.5rem', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--color-text)', zIndex: 10 }}
-                    >
-                      <ChevronLeft size={48} />
-                    </button>
-                    <button 
-                      onClick={() => setCurrentImageIndex((prev) => (prev === selectedProject.images.length - 1 ? 0 : prev + 1))}
-                      style={{ position: 'absolute', right: '0.5rem', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--color-text)', zIndex: 10 }}
-                    >
-                      <ChevronRight size={48} />
-                    </button>
-                  </div>
-                ) : (
-                  /* GRID VIEW (Default) */
+                if (selectedProject.isFlipbook) {
+                  /* FLIPBOOK VIEW */
+                  // Group images into spreads: [1], [2,3], [4,5], etc.
+                  const spreads = [[displayImages[0]]];
+                  for (let i = 1; i < displayImages.length; i += 2) {
+                    spreads.push(displayImages.slice(i, i + 2));
+                  }
+
+                  return (
+                    <div style={{ position: 'relative', width: '100%', maxWidth: spreads[currentImageIndex].length > 1 ? '1000px' : '500px', margin: '0 auto', height: '65vh', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'max-width 0.5s ease' }}>
+                      <AnimatePresence mode="wait">
+                        <motion.div
+                          key={`${activeVolumeIndex}-${currentImageIndex}`}
+                          initial={{ opacity: 0, x: 20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          exit={{ opacity: 0, x: -20 }}
+                          style={{
+                            width: '100%',
+                            height: '100%',
+                            display: 'flex',
+                            gap: '2px',
+                            backgroundColor: spreads[currentImageIndex].length > 1 ? 'rgba(0,0,0,0.1)' : 'transparent',
+                            borderRadius: '12px',
+                            overflow: 'hidden',
+                            boxShadow: spreads[currentImageIndex].length > 1 ? '0 30px 60px rgba(0,0,0,0.4)' : 'none',
+                            perspective: '2000px'
+                          }}
+                        >
+                          {spreads[currentImageIndex].map((img, idx) => (
+                            <motion.div
+                              key={`${activeVolumeIndex}-${currentImageIndex}-${idx}`}
+                              initial={idx === 1 ? { rotateY: 90 } : { opacity: 0 }}
+                              animate={idx === 1 ? { rotateY: 0 } : { opacity: 1 }}
+                              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                              style={{
+                                flex: 1,
+                                height: '100%',
+                                position: 'relative',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                boxShadow: spreads[currentImageIndex].length > 1
+                                  ? (idx === 0 ? 'inset -15px 0 30px rgba(0,0,0,0.2)' : 'inset 15px 0 30px rgba(0,0,0,0.2)')
+                                  : 'none',
+                                borderRadius: spreads[currentImageIndex].length > 1
+                                  ? (idx === 0 ? '12px 0 0 12px' : '0 12px 12px 0')
+                                  : '12px',
+                                overflow: 'hidden',
+                                transformOrigin: idx === 1 ? 'left' : 'center',
+                                zIndex: idx === 1 ? 5 : 1
+                              }}
+                            >
+                              <img
+                                src={img}
+                                alt={`${selectedProject.title} ${currentImageIndex}-${idx}`}
+                                style={{ width: '100%', height: '100%', objectFit: spreads[currentImageIndex].length > 1 ? 'cover' : 'contain', display: 'block' }}
+                              />
+                              {spreads[currentImageIndex].length > 1 && (
+                                <div style={{
+                                  position: 'absolute',
+                                  top: 0,
+                                  bottom: 0,
+                                  width: '40px',
+                                  background: idx === 0
+                                    ? 'linear-gradient(to right, transparent, rgba(0,0,0,0.3))'
+                                    : 'linear-gradient(to left, transparent, rgba(0,0,0,0.3))',
+                                  left: idx === 0 ? 'auto' : 0,
+                                  right: idx === 0 ? 0 : 'auto',
+                                  zIndex: 2
+                                }} />
+                               )}
+                            </motion.div>
+                          ))}
+                        </motion.div>
+                      </AnimatePresence>
+
+                      <div style={{ position: 'absolute', bottom: '-4.5rem', left: '50%', transform: 'translateX(-50%)', fontWeight: 700, opacity: 0.6, fontSize: '1.1rem', letterSpacing: '0.1em', whiteSpace: 'nowrap', textAlign: 'center' }}>
+                        {selectedProject.volumes && <div style={{ fontSize: '0.8rem', marginBottom: '0.3rem', color: 'var(--color-accent-yellow)' }}>{selectedProject.volumes[activeVolumeIndex].title.toUpperCase()}</div>}
+                        SPREAD {currentImageIndex + 1} / {spreads.length}
+                      </div>
+
+                      <button
+                        onClick={() => setCurrentImageIndex((prev) => (prev === 0 ? spreads.length - 1 : prev - 1))}
+                        style={{ position: 'absolute', left: '0.5rem', top: '50%', transform: 'translateY(-50%)', background: 'var(--color-accent-yellow)', borderRadius: '50%', border: 'none', width: '44px', height: '44px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: 'var(--color-bg)', boxShadow: 'var(--shadow-sticker)', zIndex: 10 }}
+                      >
+                        <ChevronLeft size={32} />
+                      </button>
+                      <button
+                        onClick={() => setCurrentImageIndex((prev) => (prev === spreads.length - 1 ? 0 : prev + 1))}
+                        style={{ position: 'absolute', right: '0.5rem', top: '50%', transform: 'translateY(-50%)', background: 'var(--color-accent-yellow)', borderRadius: '50%', border: 'none', width: '44px', height: '44px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: 'var(--color-bg)', boxShadow: 'var(--shadow-sticker)', zIndex: 10 }}
+                      >
+                        <ChevronRight size={32} />
+                      </button>
+                    </div>
+                  );
+                }
+
+                if (selectedProject.isCarousel) {
+                  /* CAROUSEL VIEW */
+                  return (
+                    <div style={{ position: 'relative', width: '100%', maxWidth: '800px', margin: '0 auto', height: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <AnimatePresence mode="wait">
+                        <motion.div
+                          key={currentImageIndex}
+                          initial={{ opacity: 0, x: 20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          exit={{ opacity: 0, x: -20 }}
+                          transition={{ duration: 0.3 }}
+                          style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                        >
+                          <img
+                            src={displayImages[currentImageIndex]}
+                            alt={`${selectedProject.title} ${currentImageIndex + 1}`}
+                            style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', boxShadow: 'var(--shadow-card)', borderRadius: '12px' }}
+                          />
+                        </motion.div>
+                      </AnimatePresence>
+
+                      <div style={{ position: 'absolute', bottom: '-3rem', left: '50%', transform: 'translateX(-50%)', fontWeight: 700, opacity: 0.6 }}>
+                        {currentImageIndex + 1} / {displayImages.length}
+                      </div>
+
+                      <button
+                        onClick={() => setCurrentImageIndex((prev) => (prev === 0 ? displayImages.length - 1 : prev - 1))}
+                        style={{ position: 'absolute', left: '0.5rem', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--color-text)', zIndex: 10 }}
+                      >
+                        <ChevronLeft size={48} />
+                      </button>
+                      <button
+                        onClick={() => setCurrentImageIndex((prev) => (prev === displayImages.length - 1 ? 0 : prev + 1))}
+                        style={{ position: 'absolute', right: '0.5rem', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--color-text)', zIndex: 10 }}
+                      >
+                        <ChevronRight size={48} />
+                      </button>
+                    </div>
+                  );
+                }
+
+                /* GRID VIEW (Default) */
+                return (
                   <div style={{
                     display: 'grid',
                     gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
@@ -412,7 +495,7 @@ function App() {
                     margin: '0 auto',
                     padding: '1rem'
                   }}>
-                    {selectedProject.images.map((img, i) => (
+                    {displayImages.map((img, i) => (
                       <motion.div
                         key={i}
                         initial={{ opacity: 0, y: 50 }}
@@ -430,12 +513,8 @@ function App() {
                       </motion.div>
                     ))}
                   </div>
-                )
-              ) : (
-                <div style={{ height: '400px', border: '2px dashed var(--color-border)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '2rem', color: 'var(--color-text-light)' }}>Images coming soon...</h3>
-                </div>
-              )}
+                );
+              })()}
             </div>
           </motion.div>
         )}
