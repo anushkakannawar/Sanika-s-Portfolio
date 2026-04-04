@@ -234,7 +234,7 @@ nav {
 }
 
 .hero-title-name {
-  font-size: clamp(2.2rem, 9vw, 7rem);
+  font-size: clamp(1.8rem, 9vw, 7rem);
   line-height: 0.9;
   text-transform: uppercase;
   letter-spacing: -0.04em;
@@ -283,16 +283,17 @@ nav {
 
 .about-grid {
   display: grid;
-  grid-template-columns: 1.2fr 0.8fr;
+  grid-template-columns: 1fr 1fr;
   align-items: center;
-  gap: 3rem;
+  gap: 4rem; /* Increased gap slightly to account for the larger image */
 }
 
 .about-image-container {
   position: relative;
   width: 100%;
-  max-width: 400px;
+  max-width: 600px; /* Increased to let the 1fr column flex fully */
   margin: 0 auto;
+  cursor: pointer;
 }
 
 .about-image {
@@ -304,6 +305,7 @@ nav {
   box-shadow: var(--shadow-sticker);
   position: relative;
   z-index: 2;
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
 }
 
 .about-image-frame {
@@ -316,6 +318,18 @@ nav {
   border-radius: 24px;
   z-index: 1;
   transform: rotate(-3deg);
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@media (hover: hover) {
+  .about-image-container:hover .about-image {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: var(--shadow-card);
+  }
+  
+  .about-image-container:hover .about-image-frame {
+    transform: rotate(-8deg) scale(1.05) translate(-10px, 5px);
+  }
 }
 
 @media (max-width: 968px) {
@@ -355,9 +369,15 @@ nav {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.portfolio-card:hover {
-  transform: translateY(-5px);
-  box-shadow: var(--shadow-card);
+@media (hover: hover) {
+  .portfolio-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-card);
+  }
+
+  .portfolio-card:hover .portfolio-image img {
+    transform: scale(1.05);
+  }
 }
 
 .portfolio-image {
@@ -372,10 +392,6 @@ nav {
   height: 100%;
   object-fit: cover;
   transition: transform 0.6s ease;
-}
-
-.portfolio-card:hover .portfolio-image img {
-  transform: scale(1.05);
 }
 
 .portfolio-card-content {
@@ -684,12 +700,13 @@ nav {
 .hw-track {
   display: flex;
   flex-wrap: nowrap;
-  gap: 6rem;
+  gap: 12vw;
   padding-left: 15vw;
-  padding-right: 50vw; /* Increased from 35vw to ensure items can reach the center */
+  padding-right: 0; /* Handled by explicit spacer in JSX */
   height: 100vh;
   align-items: center;
   will-change: transform;
+  width: max-content;
 }
 
 /* More stable padding handling */
@@ -706,11 +723,10 @@ nav {
 .hw-panel-intro {
   flex-direction: column;
   gap: 1rem;
-  width: min-content;
+  width: max-content;
   padding-right: 5vw;
   display: flex;
   justify-content: center;
-  z-index: 1;
 }
 
 .hw-title {
@@ -868,7 +884,7 @@ nav {
 }
 
 .seq-reveal-title {
-  font-size: clamp(3rem, 7vw, 6rem);
+  font-size: clamp(2.2rem, 7vw, 6rem);
   text-transform: uppercase;
   line-height: 0.9;
   letter-spacing: -0.04em;
@@ -887,5 +903,44 @@ nav {
 @media (max-width: 768px) {
   .seq-reveal-image img {
     height: clamp(250px, 50vh, 500px);
+  }
+}
+
+/* ============================
+   LIVELY MODAL IMAGES
+   ============================ */
+
+.lively-image-container {
+  overflow: visible;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-height: 450px;
+  cursor: pointer;
+  padding: 10px; /* space for drop shadow to not be cut off */
+}
+
+.lively-image {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  display: block;
+  border-radius: 12px;
+  border: 4px solid var(--color-border);
+  box-shadow: var(--shadow-sticker);
+  background-color: var(--color-text); /* Ensure transparent pngs look good */
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Add an alternating child behavior based on nth-child in React, but we can do it via CSS */
+@media (hover: hover) {
+  .lively-image-container:nth-child(even):hover .lively-image {
+    transform: translateY(-8px) scale(1.05) rotate(2deg);
+    box-shadow: var(--shadow-card);
+  }
+
+  .lively-image-container:nth-child(odd):hover .lively-image {
+    transform: translateY(-8px) scale(1.05) rotate(-2deg);
+    box-shadow: var(--shadow-card);
   }
 }

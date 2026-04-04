@@ -16,21 +16,20 @@ export default function HorizontalWork({ portfolioItems, onProjectClick }) {
     if (!panels.length) return;
 
     // Dynamically calculate scroll distance for responsive resizing
-    const getTotalWidth = () => {
-      // scrollWidth includes the flex gap and the ::after padding
-      return trackRef.current.scrollWidth - window.innerWidth;
+    const getScrollAmount = () => {
+      // With the explicit spacer, scrollWidth is perfectly reliable across all browsers
+      return track.scrollWidth - window.innerWidth;
     };
 
     const tween = gsap.to(track, {
-      x: () => -getTotalWidth(),
+      x: () => -getScrollAmount(),
       ease: 'none',
       scrollTrigger: {
         trigger: sectionRef.current,
         pin: true,
-        scrub: 1, // Smoother scrub
-        end: () => `+=${trackRef.current.scrollWidth}`, 
+        scrub: 0.5,
+        end: () => `+=${getScrollAmount()}`, 
         invalidateOnRefresh: true,
-        fastScrollEnd: true,
       },
     });
 
@@ -103,7 +102,7 @@ export default function HorizontalWork({ portfolioItems, onProjectClick }) {
             key={item.id}
             id={`project-${item.id}`}
             onClick={() => onProjectClick(item)}
-            style={{ cursor: 'pointer', width: 'clamp(300px, 25vw, 400px)' }}
+            style={{ cursor: 'pointer', width: 'clamp(260px, 75vw, 400px)' }}
           >
             <div className="portfolio-card" style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
               <div className="portfolio-image">
@@ -125,6 +124,8 @@ export default function HorizontalWork({ portfolioItems, onProjectClick }) {
             </div>
           </div>
         ))}
+        {/* Explicit spacer to force padding in scrollWidth calculation */}
+        <div style={{ flex: '0 0 15vw' }}></div>
       </div>
     </section>
   );
