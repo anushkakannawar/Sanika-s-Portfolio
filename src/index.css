@@ -700,6 +700,7 @@ nav {
 .hw-panel {
   flex: 0 0 auto;
   position: relative;
+  z-index: 10;
 }
 
 .hw-panel-intro {
@@ -709,6 +710,7 @@ nav {
   padding-right: 5vw;
   display: flex;
   justify-content: center;
+  z-index: 1;
 }
 
 .hw-title {
